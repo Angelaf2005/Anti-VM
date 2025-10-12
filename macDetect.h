@@ -2,15 +2,20 @@
 
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 // Lista de prefijos MAC conocidos de hipervisores
-const std::vector<std::string> vm_mac_pref = {
-    "00:05:69", "00:0C:29", "00:50:56", // VMware
-    "08:00:27",                         // VirtualBox
-    "00:15:5D"                          // Hyper-V
+const std::unordered_map<std::string, std::string> vm_mac_map = {
+    {"00:05:69", "VMware"},
+    {"00:0C:29", "VMware"},
+    {"00:50:56", "VMware"},
+    {"00:1C:14", "VMware"},
+    {"08:00:27", "VirtualBox"},
+    {"0A:00:27", "VirtualBox"}
 };
 
 
 std::string formatMac(const unsigned char* mac, size_t len = 6);
-bool isVmMac(const std::string& mac);
+std::string classMac(const std::string& mac);
+bool isVirtualInterface(const std::string& ifname);
 bool detectVMByMac();

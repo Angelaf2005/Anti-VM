@@ -1,4 +1,4 @@
-#include "MacDetect.h"
+#include "macDetect.h"
 
 #include <iostream>
 
@@ -20,14 +20,30 @@ std::string formatMac(unsigned char* mac, size_t len) {
     return std::string(buf);
 }
 
-// Compara si el prefijo MAC coincide con alguno de los OUIs
-bool isVmMac(const std::string& mac) {
-    for (const auto& prefix : vm_mac_pref) {
-        if (mac.substr(0, prefix.size()) == prefix)
-            return true;
-    }
-    return false;
+std::string classMac(const std::string& mac) {
+    std::string prefix = mac.substr(0, 8);
+    auto it = vm_mac_map.find(prefix);
+    if (it != vm_mac_map.end())
+        // Retorna el nombre del hipervisor si se encuentra en el mapa
+        return it->second;
+    return "Fisica";
 }
+
+bool isVirtualInterface(const std::string& ifname) {
+    return (
+        ifname == "lo" ||                          // loopback
+        ifname.find("docker") == 0 ||              // Docker
+        ifname.find("veth") == 0 ||                // veth
+        ifname.find("virbr") == 0 ||               // libvirt
+        ifname.find("br-") == 0 ||                 // manual
+        ifname.find("tun") == 0 ||                 // VPN tunnel
+        ifname.find("tap") == 0 ||                 // virtual tap
+        ifname.find("vmnet") == 0 ||               // VMware virtual net
+        ifname.find("enx") == 0 ||                 // USB Ethernet 
+        ifname.find(":") != std::string::npos      // alias (eth0:1)
+    );
+}
+
 
 bool detectVMByMac() {
 #ifdef _WIN32
@@ -49,14 +65,18 @@ bool detectVMByMac() {
             desc.find("Loopback") == std::string::npos &&
             desc.find("Pseudo") == std::string::npos) {
 
+            std::string type = classMac(mac);
             std::cout << "[MAC Detect] Interfaz principal activa: " << desc << ", MAC: " << mac << "\n";
+            std::cout << "MAC OUI: " << type << "\n";
 
-            if (isVmMac(mac)) {
-                std::cout << "MAC OUI: VM detectada.\n";
-                return true;
-            } else {
-                std::cout << "MAC OUI: Sistema fisico detectado.\n";
+            if (type == "Fisica")
+            {
+                std::cout << "Sistema físico: Windows\n";
                 return false;
+            }
+            else
+            {
+                return true;
             }
         }
 
@@ -72,32 +92,44 @@ bool detectVMByMac() {
     if (getifaddrs(&ifap) != 0)
         return false;
 
-    for (struct ifaddrs* p = ifap; p; p = p->ifa_next) {
-        if (!p->ifa_addr || p->ifa_addr->sa_family != AF_PACKET)
-            continue;
+   for (struct ifaddrs* p = ifap; p; p = p->ifa_next) {
+    if (!p->ifa_addr || p->ifa_addr->sa_family != AF_PACKET)
+        continue;
 
-        if (!(p->ifa_flags & IFF_UP))
-            continue;
+    if (!(p->ifa_flags & IFF_UP))
+        continue;
 
-        std::string ifname = p->ifa_name;
-        struct sockaddr_ll* s = (struct sockaddr_ll*)p->ifa_addr;
-        std::string mac = formatMac(s->sll_addr);
+    std::string ifname = p->ifa_name;
+    struct sockaddr_ll* s = (struct sockaddr_ll*)p->ifa_addr;
 
-        std::cout << "[MAC Detect] Activa: " << ifname << ", MAC: " << mac << "\n";
+    if (s->sll_halen < 6)
+        continue;
 
-        if (isVmMac(mac)) {
-            std::cout << "[MAC Detect] VM detectada por MAC activa: " << mac << "\n";
-            freeifaddrs(ifap);
-            return true;
-        }
+    // Filtrar solo interfaz fisica principal
+    if (isVirtualInterface(ifname))
+    continue;
+
+
+    std::string mac = formatMac(s->sll_addr, s->sll_halen);
+    std::string type = classMac(mac);
+
+    std::cout << "[MAC Detect] Interfaz principal activa: " << ifname << ", MAC: " << mac << "\n";
+    std::cout << "MAC OUI: " << type << "\n";
+
+    freeifaddrs(ifap); 
+
+    if (type == "Fisica") {
+        std::cout << "Sistema físico: Linux\n";
+        return false;
+    } else {
+        return true;
     }
-
-    freeifaddrs(ifap);
-    std::cout << "[MAC Detect] No se detectó MAC de VM en interfaces activas.\n";
-    return false;
+}
 
 
 #endif
+
+    
 
     std::cout << "[MAC Detect] No se detecto MAC de VM.\n";
     return false;

@@ -1,4 +1,4 @@
-#include "MacDetect.h"
+#include "macDetect.h"
 #include <iostream>
 
 int main() {
