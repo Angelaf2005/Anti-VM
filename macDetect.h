@@ -14,8 +14,14 @@ const std::unordered_map<std::string, std::string> vm_mac_map = {
     {"0A:00:27", "VirtualBox"}
 };
 
+extern bool macWHost;
+extern bool macWVBox;
+extern bool macWVMware;
+extern bool macLHost;
+extern bool macLVBox;
+extern bool macLVMware;
 
 std::string formatMac(const unsigned char* mac, size_t len = 6);
 std::string classMac(const std::string& mac);
 bool isVirtualInterface(const std::string& ifname);
-bool detectVMByMac();
+void detectVMByMac();
