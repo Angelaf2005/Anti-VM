@@ -160,10 +160,8 @@ void detectVMByMac()
         std::string mac = formatMac(s->sll_addr, s->sll_halen);
         std::string type = classMac(mac);
 
-        // std::cout << "[MAC Detect] Interfaz principal activa: " << ifname << ", MAC: " << mac << "\n";
-
-        freeifaddrs(ifap);
-
+        //std::cout << "[MAC Detect] Interfaz principal activa: " << ifname << ", MAC: " << mac << "\n";
+        
         if (type == "Fisica")
         {
             macLHost = true;
