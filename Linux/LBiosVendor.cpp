@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <algorithm>
+#include "LBiosVendor.h"
 
 std::string getBiosVendor() {
     std::ifstream file("/sys/class/dmi/id/bios_vendor");
@@ -14,27 +15,22 @@ std::string getBiosVendor() {
     return ""; 
 }
 
-bool isVirtualMachine() {
+void isVirtualMachine() {
     std::string vendor = getBiosVendor();
-    if (vendor.empty()) return false;
+    if (vendor.empty()) return;
 
     std::string lowerVendor = vendor;
     std::transform(lowerVendor.begin(), lowerVendor.end(), lowerVendor.begin(), ::tolower);
 
-    return (lowerVendor.find("vmware") != std::string::npos ||
-            lowerVendor.find("virtualbox") != std::string::npos ||
-            lowerVendor.find("innotek") != std::string::npos ||
-            lowerVendor.find("qemu") != std::string::npos);
+    if (lowerVendor.find("vmware") != std::string::npos) {
+        biosLinVMware = true;
+        return;
+    } else if (lowerVendor.find("virtualbox") != std::string::npos) {
+        biosLinVBox = true;
+        return;
+    } else{
+        biosLinHost = true;
+        return;
+        }
+    return;
 }
-/*
-int main() {
-    std::cout << "Detector de VM Linux" << std::endl;
-    std::string vendor = getBiosVendor();
-    bool isVM = isVirtualMachine();
-
-    std::cout << "Fabricante del BIOS: " << vendor << std::endl;
-    std::cout << "Maquina virtual detectada: " << (isVM ? "SI" : "NO") << std::endl;
-
-    return 0;
-}
-*/

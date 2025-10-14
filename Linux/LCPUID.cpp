@@ -3,10 +3,13 @@
 #include <cpuid.h>
 #include <cstring>
 #include <string>
+#include "LCPUID.h"
 
-bool cpuidWinVMware = false;
-bool cpuidWinVBox = false;
-bool cpuidWinHost = false;
+bool cpuidLinVMware = false;
+bool cpuidLinVBox = false;
+bool cpuidLinHost = false;
+
+
 
 void HypervisorPresente() {
     std::array<int, 4> cpuInfo;
@@ -14,7 +17,7 @@ void HypervisorPresente() {
     bool hypervisorBit = (cpuInfo[2] >> 31) & 1;
 
     if (!hypervisorBit) {
-        cpuidWinHost = true;
+        cpuidLinHost = true;
         return;
     }
 
@@ -27,16 +30,14 @@ void HypervisorPresente() {
 
     std::string id(hypervisorId);
     if (id == "VMwareVMware") {
-        cpuidWinVMware = true;
+        cpuidLinVMware = true;
     } else if (id == "VBoxVBoxVBox") {
-        cpuidWinVBox = true;
+        cpuidLinVBox = true;
     } else {
-        cpuidWinHost = true; // 
+        cpuidLinHost = true; // 
     }
 
     return;
 
 
 }
-
-

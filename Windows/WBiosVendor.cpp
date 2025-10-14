@@ -2,6 +2,11 @@
 #include <windows.h>
 #include <string>
 #include <algorithm>
+#include "WBiosVendor.h"
+
+bool biosWinVMware = false;
+bool biosWinVBox = false;
+bool biosWinHost = false;
 
 std::string getBiosVendor() {
     HKEY hKey;
@@ -22,18 +27,28 @@ std::string getBiosVendor() {
     return "";
 }
 
-bool isVirtualMachine() {
+void isVirtualMachine() {
     std::string vendor = getBiosVendor();
-    if (vendor.empty()) return false;
+    if (vendor.empty()) return;
 
     std::string lowerVendor = vendor;
     std::transform(lowerVendor.begin(), lowerVendor.end(), lowerVendor.begin(), ::tolower);
 
-    return (lowerVendor.find("vmware") != std::string::npos ||
-        lowerVendor.find("virtualbox") != std::string::npos ||
-        lowerVendor.find("innotek") != std::string::npos ||
-        lowerVendor.find("qemu") != std::string::npos);
+    if (lowerVendor.find("vmware") != std::string::npos) {
+        biosWinVMware = true;
+        return;
+    } else if (lowerVendor.find("virtualbox") != std::string::npos) {
+        biosWinVBox = true;
+        return;
+    } else{
+        biosWinHost = true;
+        return;
+        }
+    return;
 }
+
+    
+
 /*
 int main() {
     std::cout << "Detector de VM por BIOS Vendor" << std::endl;
