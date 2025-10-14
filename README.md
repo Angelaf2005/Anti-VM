@@ -12,7 +12,7 @@ Programa en C++ para detección de entornos virtuales. Detecta si un sistema se 
 # Compilación
 ## Windows
 ```
-Codigo
+ g++ .\main.cpp .\macDetect.cpp .\WBiosVendor.cpp .\WCPUID.cpp -o anti-vm-windows.exe -liphlpapi
 ```
 ## Linux
 ```
@@ -22,7 +22,7 @@ g++ ./main.cpp ./macDetect.cpp ./LCPUID.cpp ./LBiosVendor.cpp -o anti-vm-linux -
 # Ejecución
 ## Windows
 ```
-Codigo
+.\anti-vm-windows.exe
 ```
 # Linux
 ```
@@ -30,12 +30,22 @@ Codigo
 ```
 
 # Tabla de resultados
+## Linux
 ```
 | Tecnica               | Win-Host | Win-VM (VBox) | Win-VM (VMware) | Lin-Host | Lin-VM (VBox) | Lin-VM (VMware) |
 |-----------------------|----------|---------------|-----------------|----------|---------------|-----------------|
 | CPUID Hypervisor Bit  | No       | No            | No              | No       | No            | Si              |
 | BIOS Vendor String    | No       | No            | No              | Si       | No            | No              |
 | MAC OUI               | No       | No            | No              | No       | No            | Si              |
+```
+
+## Windows
+```
+| Tecnica               | Win-Host | Win-VM (VBox) | Win-VM (VMware) | Lin-Host | Lin-VM (VBox) | Lin-VM (VMware) |
+|-----------------------|----------|---------------|-----------------|----------|---------------|-----------------|
+| CPUID Hypervisor Bit  | Si       | No            | No              | No       | No            | No              |
+| BIOS Vendor String    | Si       | No            | No              | No       | No            | No              |
+| MAC OUI               | Si       | No            | No              | No       | No            | No              |
 ```
 
 # Conclusiones
