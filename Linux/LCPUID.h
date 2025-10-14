@@ -1,5 +1,5 @@
 #ifndef HAY_HYPERVISOR_H
-#define HYPERVISOR_H
+#define HAY_HYPERVISOR_H
 
 extern bool cpuidLinVMware;
 extern bool cpuidLinVBox;

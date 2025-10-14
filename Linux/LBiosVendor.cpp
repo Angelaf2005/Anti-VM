@@ -4,6 +4,10 @@
 #include <algorithm>
 #include "LBiosVendor.h"
 
+bool biosLinVMware = false;
+bool biosLinVBox =  false;
+bool biosLinHost =  false;
+
 std::string getBiosVendor() {
     std::ifstream file("/sys/class/dmi/id/bios_vendor");
     if (file.is_open()) {
