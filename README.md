@@ -16,7 +16,7 @@ Codigo
 ```
 ## Linux
 ```
-Codigo
+g++ ./main.cpp ./macDetect.cpp ./LCPUID.cpp ./LBiosVendor.cpp -o anti-vm-linux -std=c++17
 ```
 
 # Ejecución
@@ -26,7 +26,7 @@ Codigo
 ```
 # Linux
 ```
-Codigo
+./anti-vm-linux
 ```
 
 # Tabla de resultados
