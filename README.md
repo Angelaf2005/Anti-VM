@@ -31,7 +31,11 @@ Codigo
 
 # Tabla de resultados
 ```
-Tabla
+| Tecnica               | Win-Host | Win-VM (VBox) | Win-VM (VMware) | Lin-Host | Lin-VM (VBox) | Lin-VM (VMware) |
+|-----------------------|----------|---------------|-----------------|----------|---------------|-----------------|
+| CPUID Hypervisor Bit  | No       | No            | No              | No       | No            | Si              |
+| BIOS Vendor String    | No       | No            | No              | Si       | No            | No              |
+| MAC OUI               | No       | No            | No              | No       | No            | Si              |
 ```
 
 # Conclusiones
