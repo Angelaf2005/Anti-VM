@@ -49,3 +49,7 @@ g++ ./main.cpp ./macDetect.cpp ./LCPUID.cpp ./LBiosVendor.cpp -o anti-vm-linux -
 ```
 
 # Conclusiones
+
+# Licencia
+Este proyecto se distribuye bajo la licencia **MIT**.
+Consulta el archivo [LICENSE](./LICENSE) para mas información.
