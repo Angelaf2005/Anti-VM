@@ -46,18 +46,3 @@ void isVirtualMachine() {
         }
     return;
 }
-
-    
-
-/*
-int main() {
-    std::cout << "Detector de VM por BIOS Vendor" << std::endl;
-    std::string vendor = getBiosVendor();
-    bool isVM = isVirtualMachine();
-
-    std::cout << "Fabricante del BIOS: " << vendor << std::endl;
-    std::cout << "Maquina virtual detectada: " << (isVM ? "SI" : "NO") << std::endl;
-
-    return 0;
-}
-*/

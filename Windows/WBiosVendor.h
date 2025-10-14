@@ -9,12 +9,4 @@ extern bool biosWinHost;
 std::string getBiosVendor();
 void isVirtualMachine();
 
-
-
-
-
-
-
-
-
 #endif // VM_DETECTION_H
