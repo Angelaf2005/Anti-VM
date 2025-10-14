@@ -22,7 +22,7 @@ Programa en C++ para detección de entornos virtuales. Detecta si un sistema se 
 # Compilación
 ## Windows
 ```
- g++ .\main.cpp .\macDetect.cpp .\WBiosVendor.cpp .\WCPUID.cpp -o anti-vm-windows.exe -liphlpapi
+ g++ .\main.cpp .\macDetect.cpp .\WBiosVendor.cpp .\WCPUID.cpp -o anti-vm-windows.exe -liphlpapi -static
 ```
 ## Linux
 ```
